@@ -18,4 +18,3 @@ public extension LogstashKey {
     static let codeKey = LogstashKey(rawValue: "code")
     static let messageKey = LogstashKey(rawValue: "message")
 }
-
