@@ -6,10 +6,10 @@ import PackageDescription
 let package = Package(
     name: "JWW Error Reporting",
     platforms: [
-        .iOS(.v13),
-        .macOS(.v10_15),
-        .watchOS(.v6),
-        .tvOS(.v13)
+        .iOS(.v12),
+        .macOS(.v10_14),
+        .watchOS(.v5),
+        .tvOS(.v12)
     ],
     products: [
         .library(
