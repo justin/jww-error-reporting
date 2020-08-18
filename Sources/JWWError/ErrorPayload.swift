@@ -1,7 +1,7 @@
 import Foundation
 
 /// The JSON payload values that are shipped up to a logstash server for ingestion.
-struct LogstashPayload: Codable {
+struct ErrorPayload: Codable {
     /// Array of "required" values that must be passed with any payload before it can be uploaded.
     static var requiredKeys: Set<LogstashKey> {
         return [ .domainKey, .codeKey, .messageKey ]
@@ -25,12 +25,6 @@ struct LogstashPayload: Codable {
     /// The current app platform: usually 'iOS'.
     let platform: String
 
-    /// The server environment that generated the error: staging, production, etc.
-    let environment: String
-
     /// The date this error was generated.
     let date: Date
-
-    /// The type of network connection the user has at the time of the error.
-    let network: String
 }

@@ -17,11 +17,12 @@ let package = Package(
             targets: ["JWWError"]),
     ],
     dependencies: [
+        .package(name: "JWWCore", url: "git@github.com:justin/jww-standard-lib.git", from: "1.0.0"),
     ],
     targets: [
         .target(
             name: "JWWError",
-            dependencies: []),
+            dependencies: ["JWWCore"]),
         .testTarget(name: "JWWError-Tests", dependencies: ["JWWError"]),
     ]
 )
