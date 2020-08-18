@@ -20,7 +20,7 @@ struct ErrorPayload: Codable {
     let appVersion: String
 
     /// The current app build.
-    let buildNumber: Int
+    let buildNumber: String
 
     /// The current app platform: usually 'iOS'.
     let platform: String

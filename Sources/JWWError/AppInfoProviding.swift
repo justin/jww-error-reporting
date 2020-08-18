@@ -6,7 +6,7 @@ public protocol AppInfoProviding {
     var appVersion: String { get }
 
     /// The build version of the app.
-    var buildNumber: Int { get }
+    var buildNumber: String { get }
 
     /// The platform the app is running on.
     var currentPlatform: String { get }

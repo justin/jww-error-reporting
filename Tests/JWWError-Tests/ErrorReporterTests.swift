@@ -7,7 +7,7 @@ final class ErrorReporterTests: XCTestCase {
     /// Test application info implementation
     private struct TestAppInfo: AppInfoProviding, Equatable {
         let appVersion: String = UUID().uuidString
-        let buildNumber: Int = Int.random(in: 0..<1000)
+        let buildNumber: String = "\(Int.random(in: 0..<1000))"
         let currentPlatform: String = UUID().uuidString
         let bundleIdentifier: String = UUID().uuidString
         let appIdentifier: String = UUID().uuidString

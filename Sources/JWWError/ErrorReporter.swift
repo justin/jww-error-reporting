@@ -66,6 +66,10 @@ public final class ErrorReporter: NSObject, URLSessionDelegate, URLSessionDataDe
     // ====================================
 
     public func post(error: ReportableError) throws {
+        guard error.isReportable else {
+            return
+        }
+
         let payload = try ErrorPayload(error: error, appInfo: appInfo)
 
         let messageData = try encoder.encode(payload)
