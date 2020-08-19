@@ -13,7 +13,4 @@ public protocol AppInfoProviding {
 
     /// Bundle identifier of the app, i.e "com.justinwme.ios.app"
     var bundleIdentifier: String { get }
-
-    /// The App Store identifier of the app.
-    var appIdentifier: String { get }
 }
