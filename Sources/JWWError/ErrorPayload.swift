@@ -2,6 +2,16 @@ import Foundation
 
 /// The JSON payload values that are shipped up to a logstash server for ingestion.
 struct ErrorPayload: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case domain
+        case code
+        case message
+        case appVersion
+        case buildNumber
+        case platform
+        case date = "@timestamp"
+    }
+
     /// Array of "required" values that must be passed with any payload before it can be uploaded.
     static var requiredKeys: Set<LogstashKey> {
         return [ .domainKey, .codeKey, .messageKey ]
