@@ -14,6 +14,9 @@ public protocol ReportableError: Swift.Error {
     /// Whether the specific instance of the error should be send to logstash for
     /// analysis. Defaults to `true`
     var isReportable: Bool { get }
+
+    /// An object containing additional information related to the error.
+    var userInfo: [ErrorPayloadKey: AnyHashable] { get }
 }
 
 // MARK: Default Implementations
@@ -71,5 +74,9 @@ extension DecodingError: ReportableError {
         }
 
         return result
+    }
+
+    public var userInfo: [ErrorPayloadKey: AnyHashable] {
+        return [:]
     }
 }

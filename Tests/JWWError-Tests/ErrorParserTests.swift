@@ -21,11 +21,12 @@ final class ErrorParserTests: XCTestCase {
         static let domain: String = "TestError"
         let code: Int
         let message: String
+        let userInfo: [ErrorPayloadKey: AnyHashable]
     }
 
     /// Validate we can generate a new error payload from a standard ReportableError.
     func testParsingError() throws {
-        let error = TestError(code: Int.random(in: 0..<100), message: UUID().uuidString)
+        let error = TestError(code: Int.random(in: 0..<100), message: UUID().uuidString, userInfo: [:])
         let info = TestAppInfo()
 
         let parser = ErrorReporter.Parser(error: error, appInfo: info)

@@ -13,7 +13,7 @@ struct ErrorPayload: Codable {
     }
 
     /// Array of "required" values that must be passed with any payload before it can be uploaded.
-    static var requiredKeys: Set<LogstashKey> {
+    static var requiredKeys: Set<ErrorPayloadKey> {
         return [ .domainKey, .codeKey, .messageKey ]
     }
 

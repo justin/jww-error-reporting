@@ -94,4 +94,3 @@ final class DecodingErrorReportingTests: XCTestCase {
         XCTAssertEqual(result.code, expectedCode)
     }
 }
-

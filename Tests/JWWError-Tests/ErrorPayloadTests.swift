@@ -5,7 +5,7 @@ import XCTest
 final class ErrorPayloadTests: XCTestCase {
     /// Validate the list of required keys for a payload.
     func testRequiredKeys() throws {
-        let expected: Set<LogstashKey> = [LogstashKey.codeKey, LogstashKey.messageKey, LogstashKey.domainKey ]
+        let expected: Set<ErrorPayloadKey> = [ErrorPayloadKey.codeKey, ErrorPayloadKey.messageKey, ErrorPayloadKey.domainKey ]
         let keys = ErrorPayload.requiredKeys
         XCTAssertEqual(keys, expected)
     }
