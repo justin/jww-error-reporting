@@ -16,10 +16,8 @@ extension ErrorReporter {
             ErrorPayload(domain: type(of: error).domain,
                          code: error.code,
                          message: error.message,
-                         appVersion: appInfo.appVersion,
-                         buildNumber: appInfo.buildNumber,
-                         platform: appInfo.currentPlatform,
-                         date: Date())
+                         date: Date(),
+                         app: ErrorPayload.AppInfo(appInfo))
         }
     }
 }

@@ -6,9 +6,7 @@ struct ErrorPayload: Codable {
         case domain
         case code
         case message
-        case appVersion
-        case buildNumber
-        case platform
+        case app
         case date = "@timestamp"
     }
 
@@ -26,15 +24,38 @@ struct ErrorPayload: Codable {
     /// The non-localized message to display for the logged error.
     let message: String
 
-    /// The current app version.
-    let appVersion: String
-
-    /// The current app build.
-    let buildNumber: String
-
-    /// The current app platform: usually 'iOS'.
-    let platform: String
-
     /// The date this error was generated.
     let date: Date
+
+    /// Information about the device / app the error was generated from.
+    let app: AppInfo
+
+    struct AppInfo: Codable {
+        private enum CodingKeys: String, CodingKey {
+            case version
+            case build
+            case platform
+        }
+
+        /// The current app version.
+        let version: String
+
+        /// The current app build.
+        let build: String
+
+        /// The current app platform: usually 'iOS'.
+        let platform: String
+
+        init(_ info: AppInfoProviding) {
+            self.version = info.appVersion
+            self.build = info.buildNumber
+            self.platform = info.currentPlatform
+        }
+
+        init(version: String, build: String, platform: String) {
+            self.version = version
+            self.build = build
+            self.platform = platform
+        }
+    }
 }

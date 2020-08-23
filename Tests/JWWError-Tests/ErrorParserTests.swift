@@ -33,11 +33,11 @@ final class ErrorParserTests: XCTestCase {
 
         let result = try XCTUnwrap(parser.makeLogstashMessage())
 
-        XCTAssertEqual(result.appVersion, info.appVersion)
-        XCTAssertEqual(result.buildNumber, info.buildNumber)
+        XCTAssertEqual(result.app.version, info.appVersion)
+        XCTAssertEqual(result.app.build, info.buildNumber)
         XCTAssertEqual(result.code, error.code)
         XCTAssertEqual(result.domain, TestError.domain)
         XCTAssertEqual(result.message, error.message)
-        XCTAssertEqual(result.platform, info.currentPlatform)
+        XCTAssertEqual(result.app.platform, info.currentPlatform)
     }
 }

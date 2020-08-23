@@ -15,10 +15,10 @@ final class ErrorPayloadTests: XCTestCase {
         let payload = ErrorPayload(domain: UUID().uuidString,
                                    code: 0,
                                    message: UUID().uuidString,
-                                   appVersion: UUID().uuidString,
-                                   buildNumber: UUID().uuidString,
-                                   platform: UUID().uuidString,
-                                   date: Date())
+                                   date: Date(),
+                                   app: ErrorPayload.AppInfo(version: UUID().uuidString,
+                                                             build: UUID().uuidString,
+                                                             platform: UUID().uuidString))
 
         let dataPayload = try JSONEncoder().encode(payload)
 
