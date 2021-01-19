@@ -15,16 +15,18 @@ final class ErrorPayloadTests: XCTestCase {
         let payload = ErrorPayload(domain: UUID().uuidString,
                                    code: 0,
                                    message: UUID().uuidString,
+                                   environment: .qa,
                                    date: Date(),
                                    app: ErrorPayload.AppInfo(version: UUID().uuidString,
-                                                             build: UUID().uuidString,
-                                                             platform: UUID().uuidString))
+                                                             build: 666,
+                                                             platform: UUID().uuidString),
+                                   metadata: [:])
 
         let dataPayload = try JSONEncoder().encode(payload)
 
         let result = try XCTUnwrap(JSONSerialization.jsonObject(with: dataPayload, options: []) as? [String: AnyHashable])
 
-        XCTAssertTrue(result.keys.contains("@timestamp"))
+        XCTAssertTrue(result.keys.contains("reported_at"))
     }
 }
 

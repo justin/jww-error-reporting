@@ -16,8 +16,10 @@ extension ErrorReporter {
             ErrorPayload(domain: type(of: error).domain,
                          code: error.code,
                          message: error.message,
+                         environment: .qa,
                          date: Date(),
-                         app: ErrorPayload.AppInfo(appInfo))
+                         app: ErrorPayload.AppInfo(appInfo),
+                         metadata: [:])
         }
     }
 }
