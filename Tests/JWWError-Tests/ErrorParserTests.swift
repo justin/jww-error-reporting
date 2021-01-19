@@ -6,11 +6,13 @@ import JWWCore
 final class ErrorParserTests: XCTestCase {
     /// Test application info implementation
     private struct TestAppInfo: AppInfoProviding, Equatable {
-        let appVersion: String = UUID().uuidString
-        let buildNumber: String = "\(Int.random(in: 0..<1000))"
-        let currentPlatform: String = UUID().uuidString
+        let marketingVersion: String = UUID().uuidString
+        let buildNumber: Int = Int.random(in: 0..<1000)
+        let platform: String = UUID().uuidString
         let bundleIdentifier: String = UUID().uuidString
         let appIdentifier: String = UUID().uuidString
+        let isDevelopmentBuild: Bool = Bool.random()
+        let network: Network = .wifi
     }
 
     private struct TestReporter: ReportingService {
@@ -33,11 +35,11 @@ final class ErrorParserTests: XCTestCase {
 
         let result = try XCTUnwrap(parser.makeLogstashMessage())
 
-        XCTAssertEqual(result.app.version, info.appVersion)
+        XCTAssertEqual(result.app.version, info.marketingVersion)
         XCTAssertEqual(result.app.build, info.buildNumber)
         XCTAssertEqual(result.code, error.code)
         XCTAssertEqual(result.domain, TestError.domain)
         XCTAssertEqual(result.message, error.message)
-        XCTAssertEqual(result.app.platform, info.currentPlatform)
+        XCTAssertEqual(result.app.platform, info.platform)
     }
 }
