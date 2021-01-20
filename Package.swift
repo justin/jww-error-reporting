@@ -17,7 +17,7 @@ let package = Package(
             targets: ["JWWError"]),
     ],
     dependencies: [
-        .package(name: "JWWCore", url: "git@github.com:justin/jww-standard-lib.git", from: "1.0.0"),
+        .package(name: "JWWCore", url: "https://github.com/justin/jww-standard-lib.git", from: "1.0.0"),
     ],
     targets: [
         .target(
