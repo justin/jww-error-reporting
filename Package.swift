@@ -12,9 +12,8 @@ let package = Package(
         .tvOS(.v13)
     ],
     products: [
-        .library(
-            name: "JWWError",
-            targets: ["JWWError"]),
+        .library(name: "JWWError", targets: ["JWWError"]),
+        .library(name: "JWWErrorDynamic", type: .dynamic, targets: ["JWWError"])
     ],
     targets: [
         .target(name: "JWWError"),
