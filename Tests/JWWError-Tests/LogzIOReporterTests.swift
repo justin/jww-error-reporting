@@ -1,5 +1,4 @@
 import XCTest
-import JWWCore
 @testable import JWWError
 
 /// Tests to validate the `LogzIOReporter` reporting service.
