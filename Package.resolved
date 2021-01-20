@@ -3,7 +3,7 @@
     "pins": [
       {
         "package": "JWWCore",
-        "repositoryURL": "git@github.com:justin/jww-standard-lib.git",
+        "repositoryURL": "https://github.com/justin/jww-standard-lib.git",
         "state": {
           "branch": null,
           "revision": "39567b2f37eb0915a9cb24fcea8929d87e97ee05",
