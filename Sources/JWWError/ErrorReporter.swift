@@ -1,5 +1,4 @@
 import Foundation
-import JWWCore
 import os.log
 
 internal final class ErrorReporter: NSObject, URLSessionDelegate, URLSessionDataDelegate {
@@ -7,8 +6,7 @@ internal final class ErrorReporter: NSObject, URLSessionDelegate, URLSessionData
 
     /// Log used for . . . reporting on the reporter.
     private static let log: OSLog = {
-        let category = LoggingProvider.Category(rawValue: "reporting")
-        return OSLog(subsystem: "com.justinwme.jwwerror", category: category)
+        return OSLog(subsystem: "com.justinwme.jwwerror", category: "reporting")
     }()
 
     private let url: URL
