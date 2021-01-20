@@ -1,7 +1,7 @@
 import Foundation
 
 /// Protocol that declares the pieces of information necessary to report an `Error` to logstash.
-public protocol ReportableError: Swift.Error {
+protocol ReportableError: Swift.Error {
     /// **Required**. The domain for the error.
     static var domain: String { get }
 
@@ -24,7 +24,7 @@ public protocol ReportableError: Swift.Error {
 // Default Implementations
 // ====================================
 extension ReportableError {
-    public var isReportable: Bool {
+    var isReportable: Bool {
         /// Default to returning true
         return true
     }
@@ -36,11 +36,11 @@ extension ReportableError {
 // ====================================
 
 extension DecodingError: ReportableError {
-    public static var domain: String {
+    static var domain: String {
         "com.justinwme.error.json-decoding"
     }
 
-    public var code: Int {
+    var code: Int {
         let result: Int
         switch self {
         case .dataCorrupted:
@@ -58,7 +58,7 @@ extension DecodingError: ReportableError {
         return result
     }
 
-    public var message: String {
+    var message: String {
         let result: String
         switch self {
         case .dataCorrupted(let context):
@@ -76,7 +76,7 @@ extension DecodingError: ReportableError {
         return result
     }
 
-    public var userInfo: [ErrorPayloadKey: AnyHashable] {
+    var userInfo: [ErrorPayloadKey: AnyHashable] {
         return [:]
     }
 }

@@ -1,7 +1,7 @@
 import Foundation
 
 /// Enum that lists possible network connection types.
-public enum Network: String, Codable {
+enum Network: String, Codable {
     /// The device is connected via a cellular connection.
     case cellular
 
@@ -13,7 +13,7 @@ public enum Network: String, Codable {
 }
 
 /// Protocol to encapsulate useful information about the running application.
-public protocol AppInfoProviding {
+protocol AppInfoProviding {
     /// The semantic version of the app.
     var marketingVersion: String { get }
 

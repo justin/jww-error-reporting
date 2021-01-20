@@ -6,7 +6,7 @@ import Foundation
 // ====================================
 extension ReportableError where Self:CustomNSError {
     /// **Required**. The domain for the error.
-    public static var domain: String {
+    static var domain: String {
         errorDomain
     }
 

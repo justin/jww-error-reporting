@@ -1,19 +1,19 @@
 import Foundation
 
-public struct ErrorPayloadKey: Hashable, Equatable, RawRepresentable {
-    public typealias RawValue = String
-    public var rawValue: RawValue
+struct ErrorPayloadKey: Hashable, Equatable, RawRepresentable {
+    typealias RawValue = String
+    var rawValue: RawValue
 
-    public init(rawValue: RawValue) {
+    init(rawValue: RawValue) {
         self.rawValue = rawValue
     }
 
-    public init(_ rawValue: RawValue) {
+    init(_ rawValue: RawValue) {
         self.rawValue = rawValue
     }
 }
 
-public extension ErrorPayloadKey {
+extension ErrorPayloadKey {
     static let domainKey = ErrorPayloadKey(rawValue: "domain")
     static let codeKey = ErrorPayloadKey(rawValue: "code")
     static let messageKey = ErrorPayloadKey(rawValue: "message")

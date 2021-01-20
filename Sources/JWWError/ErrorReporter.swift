@@ -2,8 +2,8 @@ import Foundation
 import JWWCore
 import os.log
 
-public final class ErrorReporter: NSObject, URLSessionDelegate, URLSessionDataDelegate {
-    public var backgroundHandler: (() -> Void)?
+internal final class ErrorReporter: NSObject, URLSessionDelegate, URLSessionDataDelegate {
+    var backgroundHandler: (() -> Void)?
 
     /// Log used for . . . reporting on the reporter.
     private static let log: OSLog = {
@@ -15,7 +15,7 @@ public final class ErrorReporter: NSObject, URLSessionDelegate, URLSessionDataDe
     private let appInfo: AppInfoProviding
     private var session: URLSession!
 
-    public static let sessionIdentifier: String = "com.justinwme.jwwerror.error-reporter"
+    static let sessionIdentifier: String = "com.justinwme.jwwerror.error-reporter"
 
     private struct Constants {
         static let contentType: String = "application/json"
@@ -39,7 +39,7 @@ public final class ErrorReporter: NSObject, URLSessionDelegate, URLSessionDataDe
         self.session = session
     }
 
-    public init(reportingService service: ReportingService, appInfo: AppInfoProviding) {
+    internal init(reportingService service: ReportingService, appInfo: AppInfoProviding) {
         self.url = service.url
         self.appInfo = appInfo
 
@@ -65,7 +65,7 @@ public final class ErrorReporter: NSObject, URLSessionDelegate, URLSessionDataDe
     // Public Methods
     // ====================================
 
-    public func post(error: ReportableError) throws {
+    func post(error: ReportableError) throws {
         guard error.isReportable else {
             return
         }
@@ -89,7 +89,7 @@ public final class ErrorReporter: NSObject, URLSessionDelegate, URLSessionDataDe
     // ====================================
 
     #if !os(macOS)
-    public func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
         os_log("Finished posting error reporting events.", log: ErrorReporter.log, type: .debug)
 
         if let handler = backgroundHandler {
@@ -101,7 +101,7 @@ public final class ErrorReporter: NSObject, URLSessionDelegate, URLSessionDataDe
     }
     #endif
 
-    public func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
+    func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
         if let error = error {
             os_log("Error reporter was invalidated because of error: %@.",
                    log: ErrorReporter.log,
@@ -110,7 +110,7 @@ public final class ErrorReporter: NSObject, URLSessionDelegate, URLSessionDataDe
         }
     }
 
-    public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let error = error {
             os_log("Error uploading reporting data: %@.", log: ErrorReporter.log, type: .error, String(reflecting: error))
             return
