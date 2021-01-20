@@ -6,16 +6,11 @@ on: pull_request
 jobs:
   swiftlint:
     name: "Lint Package"
-    runs-on: macos-11.0 # Big Sur
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code base.
         uses: actions/checkout@v2
-
-      - name: Install SwiftLint
-        run: | 
-          echo "$(PWD)"
-          brew install swiftlint
 
       - name: SwiftLint Source
         run: | 
