@@ -1,7 +1,7 @@
 import Foundation
 
 /// Protocol that declares the pieces of information necessary to report an `Error` to logstash.
-protocol ReportableError: Swift.Error {
+public protocol ReportableError: Swift.Error {
     /// **Required**. The domain for the error.
     static var domain: String { get }
 
