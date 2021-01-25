@@ -18,4 +18,13 @@ final class ErrorPayloadKeyTests: XCTestCase {
 
         XCTAssertEqual(key.rawValue, rawValue)
     }
+
+    /// Validate we can encode and decode an error payload key.
+    func testEncodingAndDecoding() throws {
+        let key = ErrorPayloadKey("test-key")
+        let encoded = try JSONEncoder().encode(key)
+
+        let result = try JSONDecoder().decode(ErrorPayloadKey.self, from: encoded)
+        XCTAssertEqual(result.rawValue, "test-key")
+    }
 }
