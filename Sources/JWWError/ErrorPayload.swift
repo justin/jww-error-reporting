@@ -27,7 +27,7 @@ struct ErrorPayload: Codable {
     let message: String
 
     /// The server environment you are running and reporting against.
-    let environment: Environment
+    let environment: ServerEnvironment
 
     /// The date this error was generated.
     let date: Date
@@ -36,13 +36,15 @@ struct ErrorPayload: Codable {
     let app: AppInfo
 
     /// Custom payload values that are unique to an iOS error.
-    let metadata: [String: String]
+    let metadata: Metadata
 
     struct AppInfo: Codable {
         private enum CodingKeys: String, CodingKey {
             case version
             case build
             case platform
+            case network
+            case isDevelopmentBuild = "development"
         }
 
         /// The current app version.
@@ -51,52 +53,33 @@ struct ErrorPayload: Codable {
         /// The current app build.
         let build: Int
 
-        /// The current app platform: usually 'iOS'.
+        /// The current app platform: usually 'ios'.
         let platform: String
+
+        /// The network connection the app was using when reporitng the error.
+        let network: Network
+
+        /// Boolean that returns true if the error is for a development build. (ie. via Xcode)
+        let isDevelopmentBuild: Bool
 
         init(_ info: AppInfoProviding) {
             self.version = info.marketingVersion
             self.build = info.buildNumber
             self.platform = info.platform
+            self.network = info.network
+            self.isDevelopmentBuild = info.isDevelopmentBuild
         }
 
-        init(version: String, build: Int, platform: String = "ios") {
+        init(version: String,
+             build: Int,
+             platform: String = "ios",
+             network: Network = .wifi,
+             isDevelopmentBuild: Bool = true) {
             self.version = version
             self.build = build
             self.platform = platform
+            self.network = network
+            self.isDevelopmentBuild = isDevelopmentBuild
         }
-    }
-
-    /// The server environment you are running and reporting against.
-    struct Environment: RawRepresentable, Codable {
-        let rawValue: String
-
-        init?(rawValue: String) {
-            self.rawValue = rawValue
-        }
-
-        init(named value: String) {
-            self.init(rawValue: value)!
-        }
-
-        init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            let rawValue = try container.decode(String.self)
-            self = Environment(named: rawValue)
-        }
-
-        func encode(to encoder: Encoder) throws {
-            var container = encoder.singleValueContainer()
-            try container.encode(rawValue)
-        }
-
-        /// Predefined environment for a "QA" environment.
-        static let qa = Environment(named: "qa")
-
-        /// Predefined environment for a "Staging" environment.
-        static let staging = Environment(named: "staging")
-
-        /// Predefined environment for a "Production" environment.
-        static let production = Environment(named: "production")
     }
 }

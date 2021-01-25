@@ -8,6 +8,7 @@ final class ErrorReporterTests: XCTestCase {
         let marketingVersion: String = UUID().uuidString
         let buildNumber: Int = Int.random(in: 0..<1000)
         let platform: String = UUID().uuidString
+        let environment: ServerEnvironment = .qa
         let bundleIdentifier: String = UUID().uuidString
         let appIdentifier: String = UUID().uuidString
         let isDevelopmentBuild: Bool = Bool.random()

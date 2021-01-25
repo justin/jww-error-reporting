@@ -8,18 +8,15 @@ final class ErrorParserTests: XCTestCase {
         let marketingVersion: String = UUID().uuidString
         let buildNumber: Int = Int.random(in: 0..<1000)
         let platform: String = UUID().uuidString
+        let environment: ServerEnvironment = .qa
         let bundleIdentifier: String = UUID().uuidString
         let appIdentifier: String = UUID().uuidString
         let isDevelopmentBuild: Bool = Bool.random()
         let network: Network = .wifi
     }
 
-    private struct TestReporter: ReportingService {
-        let url: URL = URL(staticString: "http://localhost/")
-    }
-
     private struct TestError: ReportableError {        
-        static let domain: String = "TestError"
+        static let domain: String = "com.justinwme.jwwerror.test-error"
         let code: Int
         let message: String
         let userInfo: [ErrorPayloadKey: AnyHashable]
@@ -27,7 +24,9 @@ final class ErrorParserTests: XCTestCase {
 
     /// Validate we can generate a new error payload from a standard ReportableError.
     func testParsingError() throws {
-        let error = TestError(code: Int.random(in: 0..<100), message: UUID().uuidString, userInfo: [:])
+        let error = TestError(code: Int.random(in: 0..<100),
+                              message: UUID().uuidString,
+                              userInfo: [:])
         let info = TestAppInfo()
 
         let parser = ErrorReporter.Parser(error: error, appInfo: info)

@@ -1,7 +1,28 @@
 import Foundation
 
+/// Protocol to encapsulate useful information about the running application.
+public protocol AppInfoProviding {
+    /// The semantic version of the app.
+    var marketingVersion: String { get }
+
+    /// The build version of the app.
+    var buildNumber: Int { get }
+
+    /// The platform the app is running on.
+    var platform: String { get }
+
+    /// The server environment you are running and reporting against.
+    var environment: ServerEnvironment { get }
+
+    /// Boolean that returns true if this report is for a development build. (ie. via Xcode)
+    var isDevelopmentBuild: Bool { get }
+
+    /// The network connection the app is running with.
+    var network: Network { get }
+}
+
 /// Enum that lists possible network connection types.
-enum Network: String, Codable {
+public enum Network: String, Codable {
     /// The device is connected via a cellular connection.
     case cellular
 
@@ -12,23 +33,36 @@ enum Network: String, Codable {
     case offline
 }
 
-/// Protocol to encapsulate useful information about the running application.
-protocol AppInfoProviding {
-    /// The semantic version of the app.
-    var marketingVersion: String { get }
+/// The server environment you are running and reporting against.
+public struct ServerEnvironment: Codable, Hashable, RawRepresentable {
+    public let rawValue: String
 
-    /// The build version of the app.
-    var buildNumber: Int { get }
+    public init?(rawValue: String) {
+        self.rawValue = rawValue
+    }
 
-    /// The platform the app is running on.
-    var platform: String { get }
+    public init(named value: String) {
+        self.init(rawValue: value)!
+    }
 
-    /// Bundle identifier of the app, i.e "com.justinwme.ios.app"
-    var bundleIdentifier: String { get }
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        self = ServerEnvironment(named: rawValue)
+    }
 
-    /// Boolean that returns true if this report is for a development build. (ie. via Xcode)
-    var isDevelopmentBuild: Bool { get }
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
 
-    /// The network connection the app is running with.
-    var network: Network { get }
+    /// Predefined environment for a "QA" environment.
+    static let qa = ServerEnvironment(named: "qa")
+
+    /// Predefined environment for a "Staging" environment.
+    static let staging = ServerEnvironment(named: "staging")
+
+    /// Predefined environment for a "Production" environment.
+    static let production = ServerEnvironment(named: "production")
 }
+
