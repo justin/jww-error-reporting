@@ -31,6 +31,15 @@ public enum Network: String, Codable {
 
     /// The device is not connected to the Internet.
     case offline
+
+    /// The device is connected using a wired connection.
+    case ethernet
+
+    /// The device is connected over a local loopback network.
+    case loopback
+
+    /// The network information was unavailable or unknown.
+    case unknown
 }
 
 /// The server environment you are running and reporting against.
