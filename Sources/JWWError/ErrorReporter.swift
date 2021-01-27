@@ -112,6 +112,10 @@ public final class ErrorReporter: NSObject {
         self.session.sessionDescription = "Error Reporter Networking"
     }
 
+    deinit {
+        session.invalidateAndCancel()
+    }
+
     // MARK: Public Methods
     // ====================================
     // Public Methods
@@ -143,7 +147,10 @@ public final class ErrorReporter: NSObject {
             let payload = try ErrorPayload(error: error, appInfo: appInfo)
             let request = try createRequest(for: service, payload: payload)
 
-            execute(request)
+            os_log("Posting error message of length %d", log: log, type: .debug, request.httpBody?.count ?? 0)
+            let task = session.dataTask(with: request)
+            task.taskDescription = error.message
+            task.resume()
         } catch let error as EncodingError {
             os_log("Failed to encode error payload. %@", log: log, type: .error, error.errorDescription ?? "Unknown Reason")
         } catch {
@@ -162,30 +169,6 @@ public final class ErrorReporter: NSObject {
         request.httpBody = try encoder.encode(payload)
         request.addValue(Constants.contentType, forHTTPHeaderField: "Content-Type")
         return request
-    }
-
-    private func session(with identifier: String) -> URLSession {
-        let configuration = URLSessionConfiguration.background(withIdentifier: identifier)
-        configuration.networkServiceType = .background
-        configuration.isDiscretionary = true
-        // If this hasn't uploaded within 12 hours, let's just say it's not worth it, k?
-        configuration.timeoutIntervalForResource = 60 * 60 * 12
-        configuration.httpAdditionalHeaders = [
-            "Content-Type": Constants.contentType
-        ]
-        return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
-    }
-
-    private func execute(_ request: URLRequest) {
-        os_log("Posting error message of length %d", log: log, type: .debug, request.httpBody?.count ?? 0)
-
-        session.dataTaskPublisher(for: request)
-            .sink { (completion) in
-                print("Completion = \(completion)")
-            } receiveValue: { (data: Data, response: URLResponse) in
-                print("Data = \(data). Response = \(response)")
-            }
-            .store(in: &cancellables)
     }
 }
 
