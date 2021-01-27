@@ -17,6 +17,10 @@ let package = Package(
     ],
     targets: [
         .target(name: "JWWError"),
+//                resources: [
+//                    .copy("Resources")
+//                ]
+//        ),
         .testTarget(name: "JWWError-Tests", dependencies: ["JWWError"]),
     ]
 )

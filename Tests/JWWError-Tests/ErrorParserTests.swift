@@ -3,18 +3,6 @@ import XCTest
 
 /// Tests to validate our `ErrorReporter` class.
 final class ErrorParserTests: XCTestCase {
-    /// Test application info implementation
-    private struct TestAppInfo: AppInfoProviding, Equatable {
-        let marketingVersion: String = UUID().uuidString
-        let buildNumber: Int = Int.random(in: 0..<1000)
-        let platform: String = UUID().uuidString
-        let environment: ServerEnvironment = .qa
-        let bundleIdentifier: String = UUID().uuidString
-        let appIdentifier: String = UUID().uuidString
-        let isDevelopmentBuild: Bool = Bool.random()
-        let network: Network = .wifi
-    }
-
     private struct TestError: ReportableError {        
         static let domain: String = "com.justinwme.jwwerror.test-error"
         let code: Int
@@ -27,7 +15,7 @@ final class ErrorParserTests: XCTestCase {
         let error = TestError(code: Int.random(in: 0..<100),
                               message: UUID().uuidString,
                               userInfo: [:])
-        let info = TestAppInfo()
+        let info = AppInfoFixture.fixture()
 
         let parser = ErrorReporter.Parser(error: error, appInfo: info)
 
