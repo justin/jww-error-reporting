@@ -3,16 +3,39 @@ import XCTest
 
 /// Tests to validate our `ErrorReporter` class.
 final class ErrorReporterTests: XCTestCase {
+    /// Throwaway reporting service we can use for tests.
     private struct TestReporter: ReportingService {
         let url: URL = URL(staticString: "http://localhost/")
     }
 
-    /// Throwaway test to just get something in here as a starter.
-    func testInitialization() throws {
-        let service = TestReporter()
-        let appInfo = AppInfoFixture.fixture()
-        let reporter = ErrorReporter(reportingService: service, appInfo: appInfo)
+    /// The error reporter instance under test.
+    private var sut: ErrorReporter!
 
-        XCTAssertNotNil(reporter)
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        sut = ErrorReporter()
+    }
+
+    override func tearDownWithError() throws {
+        try super.tearDownWithError()
+        sut = nil
+    }
+
+    /// Validate that the shared singleton initializes without a service set.
+    func testSharedSingletonInit() throws {
+        XCTAssertNil(ErrorReporter.shared.errorService)
+    }
+
+    /// Validate we can configure the reporting reporter with a new service.
+    func testConfiguringReportingService() throws {
+        let expectedService = TestReporter()
+        let info = AppInfoFixture.fixture()
+        let config = ErrorReporterConfiguration(service: expectedService, appInfo: info)
+
+        sut.configure(configuration: config)
+
+        let result = try XCTUnwrap(sut.errorService?.url)
+
+        XCTAssertEqual(result, expectedService.url)
     }
 }
