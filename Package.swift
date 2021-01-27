@@ -16,11 +16,11 @@ let package = Package(
         .library(name: "JWWErrorDynamic", type: .dynamic, targets: ["JWWError"])
     ],
     targets: [
-        .target(name: "JWWError"),
-//                resources: [
-//                    .copy("Resources")
-//                ]
-//        ),
+        .target(name: "JWWError",
+                resources: [
+                    .process("Resources")
+                ]
+        ),
         .testTarget(name: "JWWError-Tests", dependencies: ["JWWError"]),
     ]
 )
