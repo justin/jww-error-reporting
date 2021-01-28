@@ -131,8 +131,10 @@ public final class ErrorReporter: NSObject {
 
     /// Post an error up to the active reporting service.
     ///
-    /// - Parameter error: The error to upload.
-    public func post(error: ReportableError) {
+    /// - Parameters:
+    ///     - error: The error to upload.
+    ///     - additionalInfo: Supplemental key/value pairs that can be associated with the error payload.
+    public func post(error: ReportableError, additionalInfo: [ErrorPayloadKey: AnyHashable] = [:]) {
         guard error.isReportable else {
             return
         }
@@ -144,7 +146,7 @@ public final class ErrorReporter: NSObject {
         }
 
         do {
-            let payload = try ErrorPayload(error: error, appInfo: appInfo)
+            let payload = try ErrorPayload(error: error, appInfo: appInfo, additionalInfo: additionalInfo)
             let request = try createRequest(for: service, payload: payload)
 
             os_log("Posting error message of length %d", log: log, type: .debug, request.httpBody?.count ?? 0)
@@ -262,8 +264,8 @@ extension ErrorReporter: URLSessionTaskDelegate {
 // Error Payload Extensions
 // ====================================
 private extension ErrorPayload {
-    init(error: ReportableError, appInfo: AppInfoProviding) throws {
-        let parser = ErrorReporter.Parser(error: error, appInfo: appInfo)
+    init(error: ReportableError, appInfo: AppInfoProviding, additionalInfo: [ErrorPayloadKey: AnyHashable]) throws {
+        let parser = ErrorReporter.Parser(error: error, appInfo: appInfo, additionalInfo: additionalInfo)
         let message = try parser.makeLogstashMessage()
         self = message
     }
