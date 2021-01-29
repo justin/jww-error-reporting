@@ -120,6 +120,7 @@ At present, the `JWWError` library is not a 1.0.0 project, so there will be brea
 - There is no validation of the keys in terms of overriding a "reserved" key.
 - There is no vlaidation to ensure that the set of "required" keys are included in each payload. This is not as urgent since we ouly allow sending a full `ReportableError` right now. 
 - Somewhat related, there is no support presently for sending a non-error payload. We would like to support an API that just sends an arbitrary dictionary: `func post(payload: [ErrorPayloadKey: AnyHashable])`
+- The LogzIO service presently only supports sending data using the `secure` `LogzIO.Connection` type. Support for `streaming` and `insecure` is pending.
 - There is no feedback if an error fails to upload outside of the development console.
 
 ## Futher Help
