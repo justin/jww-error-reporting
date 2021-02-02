@@ -106,14 +106,14 @@ In terms of precedence, if the same `ErrorPayloadKey` is included in both `Repor
 
 At present, the `JWWError` library is not a 1.0.0 project, so there will be breaking API changes going forward. There is also plenty of missing functionality. In priority order:
 
-- The `userInfo` and `additionalInfo` payloads only support sending the following data types: `Bool`, `Int`, `Float`, `Double`, `String`, and `URL`. Support **is missing** for types such as `Array`, `Set`, and `Dictionary`, as well as any custom types.
-- There is no API for parsing an `NSError` properly. This is a high priority.
-- Parsing an underlying error in an `NSError` or `URLError` dictionary is not currently as readable as it should be.
-- There is no validation of the keys in terms of overriding a "reserved" key.
-- There is no validation to ensure that the set of "required" keys are included in each payload. This is not as urgent, since we only allow sending a full `ReportableError` right now.
-- Somewhat related, there is no support for sending a non-error payload. We would like to support an API that just sends an arbitrary dictionary: `func post(payload: [ErrorPayloadKey: AnyHashable])`
-- The LogzIO service presently only supports sending data using the `secure` `LogzIO.Connection` type. Support for `streaming` and `insecure` is pending.
-- There is no feedback if an error fails to upload outside of the development console.
+- The `userInfo` and `additionalInfo` payloads only support sending the following data types: `Bool`, `Int`, `Float`, `Double`, `String`, and `URL`. Support **is missing** for types such as `Array`, `Set`, and `Dictionary`, as well as any custom types ([#12][12]).
+- There is no API for parsing an `NSError` properly. This is a high priority ([#13][13]).
+- Parsing an underlying error in an `NSError` or `URLError` dictionary is not currently as readable as it should be ([#14][14]).
+- There is no validation of the keys in terms of overriding a "reserved" key ([#15][15]).
+- There is no validation to ensure that the set of "required" keys are included in each payload. This is not as urgent, since we only allow sending a full `ReportableError` right now ([#15][15]).
+- Somewhat related, there is no support for sending a non-error payload. We would like to support an API that just sends an arbitrary dictionary: `func post(payload: [ErrorPayloadKey: AnyHashable])` ([#15][15]).
+- The LogzIO service presently only supports sending data using the `secure` `LogzIO.Connection` type. Support for `streaming` and `insecure` is pending ([#16][16] and [#17][17]).
+- There is no feedback if an error fails to upload outside of the development console ([#18][18]).
 
 ## Futher Help
 
@@ -122,6 +122,13 @@ If you need assistance or have questions about Kibana, `ErrorReporter`, or the `
 [logz]: https://app.logz.io
 [api]: https://docs.logz.io/shipping/log-sources/json-uploads.html
 [tokens]: https://app.logz.io/#/dashboard/settings/manage-tokens/shared
+[12]: https://github.com/justin/jww-error-reporting/issues/12
+[13]: https://github.com/justin/jww-error-reporting/issues/13
+[14]: https://github.com/justin/jww-error-reporting/issues/14
+[15]: https://github.com/justin/jww-error-reporting/issues/15
+[16]: https://github.com/justin/jww-error-reporting/issues/16
+[17]: https://github.com/justin/jww-error-reporting/issues/17
+[18]: https://github.com/justin/jww-error-reporting/issues/18
 
 ## License
 
