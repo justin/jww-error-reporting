@@ -5,8 +5,8 @@ import os.log
 /// Configuration type that defines the reporting service and app info for the
 /// error reporter.
 public struct ErrorReporterConfiguration {
-    let service: ReportingService
-    let appInfo: AppInfoProviding
+    public let service: ReportingService
+    public let appInfo: AppInfoProviding
 
     public init(service: ReportingService, appInfo: AppInfoProviding) {
         self.service = service
@@ -34,6 +34,9 @@ public final class ErrorReporter: NSObject {
 
     /// Application information to pass up with each error report.
     public private(set) var appInfo: AppInfoProviding
+
+    /// Boolean that disables sending of data to the reporting service if set to true.
+    public var isDebugMode: Bool = false
 
     /// URLSession instance that is used to send data up to the server.
     private var session: URLSession!
@@ -141,13 +144,17 @@ public final class ErrorReporter: NSObject {
 
         guard let service = errorService else {
             os_log("Error cannot be sent. No reporting service configured.", log: log, type: .error)
-            assertionFailure("No reporting service configured.")
             return
         }
 
         do {
             let payload = try ErrorPayload(error: error, appInfo: appInfo, additionalInfo: additionalInfo)
             let request = try createRequest(for: service, payload: payload)
+
+            if isDebugMode {
+                os_log("Debug mode enabled. Error of length %d will not be sent.", log: log, type: .debug, request.httpBody?.count ?? 0)
+                return
+            }
 
             os_log("Posting error message of length %d", log: log, type: .debug, request.httpBody?.count ?? 0)
             let task = session.dataTask(with: request)
