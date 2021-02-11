@@ -9,14 +9,14 @@ on:
 jobs:
   macos:
     name: "Unit Tests"
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Ensure Xcode Version
         run: | 
-          sudo xcode-select -s "/Applications/Xcode_12.3.app"
+          sudo xcode-select -s "/Applications/Xcode_12.5.app"
 
       - name: Build and Test
         run: swift test
