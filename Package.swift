@@ -1,5 +1,4 @@
-// swift-tools-version:5.3
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version:5.4
 
 import PackageDescription
 
@@ -13,7 +12,6 @@ let package = Package(
     ],
     products: [
         .library(name: "JWWError", targets: ["JWWError"]),
-        .library(name: "JWWErrorDynamic", type: .dynamic, targets: ["JWWError"])
     ],
     targets: [
         .target(name: "JWWError"),
