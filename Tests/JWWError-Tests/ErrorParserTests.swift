@@ -18,7 +18,12 @@ final class ErrorParserTests: XCTestCase {
                               userInfo: [:])
         let info = AppInfoFixture.fixture()
 
-        let parser = ErrorReporter.Parser(error: error, appInfo: info, additionalInfo: [:])
+        let parser = ErrorReporter.Parser(error: error,
+                                          function: #function,
+                                          file: #fileID,
+                                          line: #line,
+                                          appInfo: info,
+                                          additionalInfo: [:])
 
         let result = try XCTUnwrap(parser.makeLogstashMessage())
 
@@ -47,6 +52,9 @@ final class ErrorParserTests: XCTestCase {
         ]
 
         let parser = ErrorReporter.Parser(error: error,
+                                          function: #function,
+                                          file: #fileID,
+                                          line: #line,
                                           appInfo: AppInfoFixture.fixture(),
                                           additionalInfo: additionalInfo)
 
@@ -79,6 +87,9 @@ final class ErrorParserTests: XCTestCase {
         ]
 
         let parser = ErrorReporter.Parser(error: error,
+                                          function: #function,
+                                          file: #fileID,
+                                          line: #line,
                                           appInfo: AppInfoFixture.fixture(),
                                           additionalInfo: additionalInfo)
 

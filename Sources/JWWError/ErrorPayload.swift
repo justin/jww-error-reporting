@@ -7,6 +7,9 @@ struct ErrorPayload: Codable {
         case code
         case message
         case environment
+        case function
+        case file
+        case line
         case date = "reported_at"
         case app = "mobile"
         case metadata = "ios.metadata"
@@ -31,6 +34,15 @@ struct ErrorPayload: Codable {
 
     /// The date this error was generated.
     let date: Date
+
+    /// The function name where the error occurred.
+    let function: String
+
+    /// The file name where the error occurred.
+    let file: String
+
+    /// The line number where the error occurred.
+    let line: UInt
 
     /// Information about the device / app the error was generated from.
     let app: AppInfo
