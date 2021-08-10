@@ -9,6 +9,15 @@ extension ErrorReporter {
         /// The reported error to parse.
         let error: ReportableError
 
+        /// The function name where the error occurred.
+        let function: String
+
+        /// The file name where the error occurred.
+        let file: String
+
+        /// The line number where the error occurred.
+        let line: UInt
+
         /// Information about the application that is reporting the error.
         let appInfo: AppInfoProviding
 
@@ -26,6 +35,9 @@ extension ErrorReporter {
                          message: error.message,
                          environment: appInfo.environment,
                          date: Date(),
+                         function: function,
+                         file: file,
+                         line: line,
                          app: ErrorPayload.AppInfo(appInfo),
                          metadata: ErrorPayloadMetadata(values: mergedPayload))
         }

@@ -136,8 +136,18 @@ public final class ErrorReporter: NSObject {
     ///
     /// - Parameters:
     ///     - error: The error to upload.
+    ///     - function: The function name to post with the error. The default is the file
+    ///                 where `post(error:function:file:line:additionalInfo)` is called.
+    ///     - file: The file name to post with the error. The default is the file
+    ///             where `post(error:function:file:line:additionalInfo)` is called.
+    ///     - line: The line number to post with the error. The default is the line number
+    ///             where `post(error:function:file:line:additionalInfo)` is called.
     ///     - additionalInfo: Supplemental key/value pairs that can be associated with the error payload.
-    public func post(error: ReportableError, additionalInfo: [ErrorPayloadKey: AnyHashable] = [:]) {
+    public func post(error: ReportableError,
+                     function: String = #function,
+                     file: String = #fileID,
+                     line: UInt = #line,
+                     additionalInfo: [ErrorPayloadKey: AnyHashable] = [:]) {
         guard error.isReportable else {
             return
         }
@@ -148,7 +158,7 @@ public final class ErrorReporter: NSObject {
         }
 
         do {
-            let payload = try ErrorPayload(error: error, appInfo: appInfo, additionalInfo: additionalInfo)
+            let payload = try ErrorPayload(error: error, function: function, file: file, line: line, appInfo: appInfo, additionalInfo: additionalInfo)
             let request = try createRequest(for: service, payload: payload)
 
             if isDebugMode {
@@ -271,8 +281,13 @@ extension ErrorReporter: URLSessionTaskDelegate {
 // Error Payload Extensions
 // ====================================
 private extension ErrorPayload {
-    init(error: ReportableError, appInfo: AppInfoProviding, additionalInfo: [ErrorPayloadKey: AnyHashable]) throws {
-        let parser = ErrorReporter.Parser(error: error, appInfo: appInfo, additionalInfo: additionalInfo)
+    init(error: ReportableError,
+         function: String = #function,
+         file: String = #fileID,
+         line: UInt = #line,
+         appInfo: AppInfoProviding,
+         additionalInfo: [ErrorPayloadKey: AnyHashable]) throws {
+        let parser = ErrorReporter.Parser(error: error, function: function, file: file, line: line, appInfo: appInfo, additionalInfo: additionalInfo)
         let message = try parser.makeLogstashMessage()
         self = message
     }
