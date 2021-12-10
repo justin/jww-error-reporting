@@ -1,6 +1,6 @@
 import Foundation
 import Combine
-import os.log
+import os
 
 /// Configuration type that defines the reporting service and app info for the
 /// error reporter.
@@ -72,9 +72,7 @@ public final class ErrorReporter: NSObject {
     }()
 
     /// Log used for . . . reporting on the reporter.
-    private let log: OSLog = {
-        return OSLog(subsystem: "com.justinwme.jwwerror", category: "reporting")
-    }()
+    private let log: Logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "reporting")
 
     private struct Constants {
         static let contentType: String = "application/json"
@@ -153,7 +151,7 @@ public final class ErrorReporter: NSObject {
         }
 
         guard let service = errorService else {
-            os_log("Error cannot be sent. No reporting service configured.", log: log, type: .error)
+            log.error("Error cannot be sent. No reporting service configured.")
             return
         }
 
@@ -162,18 +160,18 @@ public final class ErrorReporter: NSObject {
             let request = try createRequest(for: service, payload: payload)
 
             if isDebugMode {
-                os_log("Debug mode enabled. Error of length %d will not be sent.", log: log, type: .debug, request.httpBody?.count ?? 0)
+                log.debug("Debug mode enabled. Error of length \(request.httpBody?.count ?? 0) will not be sent.")
                 return
             }
 
-            os_log("Posting error message of length %d", log: log, type: .debug, request.httpBody?.count ?? 0)
+            log.debug("Posting error message of length \(request.httpBody?.count ?? 0).")
             let task = session.dataTask(with: request)
             task.taskDescription = error.message
             task.resume()
         } catch let error as EncodingError {
-            os_log("Failed to encode error payload. %@", log: log, type: .error, error.errorDescription ?? "Unknown Reason")
+            log.error("Failed to encode error payload. \(error.errorDescription ?? "Unknown Reason")")
         } catch {
-            os_log("Failed to create error payload. Error returned was %@", log: log, type: .error, error.localizedDescription)
+            log.error("Failed to create error payload. Error returned was \(error.localizedDescription)")
         }
     }
 
@@ -200,7 +198,7 @@ extension ErrorReporter: URLSessionTaskDelegate {
     #if !os(macOS)
     public func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
         if let description = session.sessionDescription {
-            os_log("%{public}@ completed all background events.", log: log, description.quoted)
+            log.info("\(description.quoted, privacy: .public) completed all background events.")
         }
 
         defer {
@@ -219,14 +217,11 @@ extension ErrorReporter: URLSessionTaskDelegate {
         let description = session.sessionDescription ?? "UNKNOWN ERROR REPORTING SESSION"
 
         if let error = error as NSError? {
-            os_log("%{public}@ was invalidated because of an error: %@",
-                   log: log,
-                   type: .error,
-                   description.quoted, error)
+            log.error("\(description.quoted, privacy: .public) was invalidated because of an error: \(error)")
             return
         }
 
-        os_log("%{public}@ was invalidated.", log: log, description.quoted)
+        log.info("\(description.quoted, privacy: .public) was invalidated.")
     }
 
     public func urlSession(_ session: URLSession, taskIsWaitingForConnectivity task: URLSessionTask) {
@@ -237,23 +232,19 @@ extension ErrorReporter: URLSessionTaskDelegate {
                            task: URLSessionTask,
                            willBeginDelayedRequest request: URLRequest,
                            completionHandler: @escaping (URLSession.DelayedRequestDisposition, URLRequest?) -> Void) {
-        os_log("%@ for request %@ will now begin.",
-               log: log,
-               type: .info,
-               String(reflecting: task), String(describing: request))
-
+        log.info("\(String(reflecting: task)) for request \(String(describing: request)) will now begin.")
         completionHandler(.continueLoading, request)
 
     }
 
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let error = error {
-            os_log("Error uploading reporting data: %@.", log: log, type: .error, String(reflecting: error))
+            log.error("Error uploading reporting data: \(String(reflecting: error))")
             return
         }
 
         if let httpResponse = task.response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
-            os_log("Response status code != %d", log: log, type: .error, httpResponse.statusCode)
+            log.error("Response status code != \(httpResponse.statusCode)")
             return
         }
     }
@@ -261,16 +252,13 @@ extension ErrorReporter: URLSessionTaskDelegate {
     public func urlSession(_ session: URLSession,
                            task: URLSessionTask,
                            didFinishCollecting metrics: URLSessionTaskMetrics) {
-        // For now we jsut care about the last URL and not anything from a redirect.
+        // For now we just care about the last URL and not anything from a redirect.
         guard let url = metrics.transactionMetrics.last?.request.url?.absoluteString else {
             return
         }
 
         if let intervalString = metricsFormatter.string(from: metrics.taskInterval.duration) {
-            os_log("Task took %{public}@. url: %@",
-                   log: log,
-                   type: .debug,
-                   intervalString, url)
+            log.debug("Task took \(intervalString, privacy: .public). url: \(url)")
         }
     }
 }
